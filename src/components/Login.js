@@ -1,173 +1,219 @@
+import React, { useState, useRef, useEffect } from 'react';
 import '../App.css';
 import '../css/Login.css';
 import getCookie from './GetCookie';
-import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '../images/logo.jpg';
-//import CryptoJS from 'crypto-js'; //AES 암호화 알고리즘으로 패스워드 쿠키를 암호화/복호화
+import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
-const Login = () =>{
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [msg, setMsg] = useState('');
+  const rememberEmailRef = useRef();
+  const rememberPasswordRef = useRef();
+  const rememberMeRef = useRef();
+  const rememberRef = useRef(null);
 
-    //Ref 초기화
-    const emailRef = useRef();
-    const emailSaveRef = useRef('N');
-    const passwordRef = useRef(); 
-    const pwSaveRef = useRef('N');
+  useEffect(() => {
+    const emailCookie = getCookie('email');
+    const passwordCookie = getCookie('password');
+    const authkeyCookie = getCookie('authkey');
 
-    //state 초기화
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
- 
-    let emailCookie = getCookie('email');
-    let emaliSaveCookie = getCookie('emailSave');    
-    let passwordCookie = getCookie('password');
-    let pwSaveCookie = getCookie('pwSave');
-    let authkeyCookie = getCookie('authkey'); 
-
-    //첫번째 렌더링 시 쿠키를 읽어 email, password,자동로그인 여부 확인한 후 쿠키에 저장된 email, password값을 input value에 넣어준다.
-    useEffect(()=> {
-        
-        checBoxConfirm() },[]);
-
-    const checBoxConfirm = async () => {
-
-        //email 쿠키 존재 여부 확인 후 email 쿠키가 존재하면 email state에 할당
-        if(emailCookie !== undefined && emaliSaveCookie === 'Y'){ //email 쿠키가 존재하면 
-            setEmail(emailCookie); //email state에 email 쿠키값을 할당
-        } else rememberEmailRef.current.checked = false;
-        
-        //패스워드 쿠키 존재 여부 확인 후 패스워드 쿠키가 존재하면 패스워드 state에 할당
-        if(passwordCookie !== undefined && pwSaveCookie === 'Y'){ //패스워드 쿠키가 존재하면
-            //Base64로 인코딩 된 password를 디코딩
-            //const decrypt = CryptoJS.enc.Base64.parse(passwordCookie);
-            //const hashData = decrypt.toString(CryptoJS.enc.Utf8);          
-            setPassword(passwordCookie);  //password state에 디코팅 된 패스워드 쿠키 값 할당 
-            rememberPasswordRef.current.checked = true; //password 기억 체크
-        } else rememberPasswordRef.current.checked = false;
-        
-        //자동로그인 쿠키 존재 여부 확인 후 자동로그인 쿠키가 존재하면 
-        if(authkeyCookie !== undefined){ //자동로그인 쿠키가 존재하면 autoLogin=PASS 쿼리를 포함하여 서버로 비동기 전송
-     
-         let formData = new FormData();
-         formData.append("authkey",authkeyCookie);
-         await fetch('/restapi/loginCheck?autoLogin=PASS',{
-            method : 'POST',
-            body : formData
-         }).then((response) => response.json())
-           .then((data) => {
-             if(data.message === 'good'){             
-                    document.location.href='/board/list?page=1';  
-            } else {
-               alert("시스템 장애로 자동 로그인이 실패 했습니다.");       
-            }        
-          }).catch((error)=> { console.log("error = " + error);} );
-      }   
-
+    if (emailCookie) {
+      rememberEmailRef.current.checked = true;
+      setEmail(emailCookie);
+    } else {
+      rememberEmailRef.current.checked = false;
     }
 
-    //아이디, 패스워드 검증 이후 아이디, 패스워드 쿠키 등록
-    const cookieManage = (username, role, authkey, accessToken, refreshToken) => { 
-
-        //email 쿠키 등록
-        document.cookie = 'email=' + email + ';path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT';       
-        if(rememberEmailRef.current.checked) 
-                document.cookie = 'emailSave=Y;path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT';  
-        else  document.cookie = 'emailSave=Y;path=/; max-age=0';             
-
-        //password 쿠키 등록
-        document.cookie = 'password=' + password + ';path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT';
-        if(rememberPasswordRef.current.checked) 
-                document.cookie = 'pwSave=Y;path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT';     
-        else document.cookie = 'pwSave=Y;path=/; max-age=0';              
-     
-    } 
-    
-    //REST API 서버와의 비동기 통신으로 아이/패스워드 검증
-    const loginCheck = async () =>{
-        if(email === null || email ===''){
-            alert('아이디를 입력하세요.');            
-            emailRef.current.focus();
-            return false;
-        }
-        if(password === null || password === ''){
-            alert('패스워드를 입력하세요');
-            passwordRef.current.focus();
-            return false;
-        }
-
-        let formData = new FormData();
-      formData.append("email", email);
-      formData.append("password", password);
- 
-        //JWT 로그인
-        if(jwtRef.current.checked){
- 
-            await fetch('http://localhost:8080/restapi/loginCheck?autoLogin=JWTNew',{
-                method : 'POST',
-                body : formData
-                
-            }).then((response) => response.json())
-            .then((data) => {
-                if(data.message === 'JWT'){   
-                    cookieManage(data.username, data.role, data.authkey, data.accessToken, data.refreshToken);
-                    document.location.href='/board/list?page=1';   
-                } else if(data.message === 'ID_NOT_FOUND') {
-                        setMessage('존재하지 않는 이메일입니다.');
-                } else if(data.message === 'PASSWORD_NOT_FOUND') {
-                        setMessage('잘못된 패스워드입니다.');
-                } else {
-                    console.log("message = " + data.message);
-                    alert("시스템 장애로 로그인이 실패 했습니다.");       
-                }        
-            }).catch((error)=> { console.log("error = " + error);} );    
-
-            
-        }else { //일반 로그인(email,password,자동로그인 인증)
-            await fetch('http://localhost:8080/restapi/loginCheck?autoLogin=NEW',{
-                method : 'POST',
-                body : formData
-            }).then((response) => response.json())
-            .then((data) => {
-                if(data.message === 'good'){   
-                    cookieManage(data.username, data.role, data.authkey);
-                    document.location.href='/board/list?page=1';   
-                } else if(data.message === 'ID_NOT_FOUND') {
-                        setMessage('존재하지 않는 이메일입니다.');
-                } else if(data.message === 'PASSWORD_NOT_FOUND') {
-                        setMessage('잘못된 패스워드입니다.');
-                } else {
-                    console.log("message = " + data.message);
-                    alert("시스템 장애로 로그인이 실패 했습니다.");       
-                }        
-            }).catch((error)=> { console.log("error = " + error);} );    
-        }
+    if (passwordCookie) {
+      rememberPasswordRef.current.checked = true;
+      const decrypt = CryptoJS.enc.Base64.parse(passwordCookie);
+      const hashData = decrypt.toString(CryptoJS.enc.Utf8);
+      setPassword(hashData);
+    } else {
+      rememberPasswordRef.current.checked = false;
     }
-        
-    //패스워드 입력창에서 엔터를 눌렀을때 로그인
-    const onKeyDown = (e) => {
-            if(e.key === 'Enter'){
-                loginCheck();
-            }    
-        };
-    
-    return(
-        <div className='main'>
-            <div className='login'>
-                <input type="text" ref={emailRef} value={email} className="email" 
-                        onChange={(e) => setEmail(e.target.value)} placeholder="이메일을 입력하세요." />
-                <input type="password" ref={passwordRef} value={password} className="memberpasswd"  
-                        onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력하세요." onKeyDown={onKeyDown}/>
-                <p style={{color: 'red',textAlign:'center'}}>{message}</p> 
-                <br />
-                <input type="button" className="login_btn" value="로그인" onClick={loginCheck} />  
-                <div className="bottomText">
-                        사용자가 아니면 ▶<Link to="/member/signup">여기</Link>를 눌러 등록을 해주세요.<br /><br />
-                    [<a href="/member/searchID">아이디</a> | <a href="/member/searchPassword" >패스워드</a>  찾기]  <br /><br />    
-                </div>
-            </div> 
-        </div>    
-    );
-};
+
+    if (authkeyCookie) {
+      const formData = new FormData();
+      formData.append('authkey', authkeyCookie);
+
+      axios.post('/member/login?autologin=PASS', formData)
+        .then((response) => {
+          const data = response.data;
+          if (data.message === 'GOOD') {
+            document.location.href = '/pet/list?page=1';
+          } else {
+            alert('시스템 장애로 자동 로그인이 실패했습니다.');
+          }
+        })
+        .catch((error) => {
+          console.log('error = ' + error);
+        });
+    }
+  }, []);
+
+  const loginCheck = async () => {
+    if (email === '') {
+      alert('이메일을 입력하세요');
+      email.focus();
+      return false;
+    }
+
+    if (password === '') {
+      alert('암호를 입력하세요');
+      password.focus();
+      return false;
+    }
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+
+    try {
+      const response = await axios.post('/member/login?autologin=NEW', formData);
+      const data = response.data;
+      if (data.message === 'GOOD') {
+        cookieManage(email, password, data.authkey);
+        document.location.href = '/pet/community?page=1';
+      } else if (data.message === 'ID_NOT_FOUND') {
+        setMsg('존재하지 않는 이메일입니다.');
+      } else if (data.message === 'PASSWORD_NOT_FOUND') {
+        setMsg('잘못된 패스워드입니다.');
+      } else {
+        alert('시스템 장애로 로그인이 실패했습니다.');
+      }
+    } catch (error) {
+      console.log('error = ' + error);
+    }
+  };
+
+  const checkRememberEmail = () => {
+    if (rememberEmailRef.current.checked)
+      rememberMeRef.current.checked = false;
+  };
+
+  const checkRememberPassword = () => {
+    if (rememberPasswordRef.current.checked)
+      rememberMeRef.current.checked = false;
+  };
+
+  const checkRememberMe = () => {
+    if (rememberMeRef.current.checked) {
+      rememberEmailRef.current.checked = false;
+      rememberPasswordRef.current.checked = false;
+    }
+  };
+
+  const cookieManage = (email, password, authkey) => {
+    if (rememberEmailRef.current.checked) {
+      document.cookie = `email=${email}; path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT`;
+    } else {
+      document.cookie = `email=${email}; path=/; max-age=0`;
+    }
+
+    if (rememberRef.current.checked) {
+      const key = CryptoJS.enc.Utf8.parse(password);
+      const base64 = CryptoJS.enc.Base64.stringify(key);
+      password = base64;
+      document.cookie = `password=${password}; path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT`;
+    } else {
+      document.cookie = `password=${password}; path=/; max-age=0`;
+    }
+
+    if (rememberMeRef.current.checked) {
+      document.cookie = `authkey=${authkey}; path=/; expires=Sun, 31 Dec 2023 23:59:59 GMT`;
+    } else {
+      document.cookie = `authkey=${authkey}; path=/; max=0`;
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) loginCheck();
+  };
+
+  return (
+    <div className="container" align="center">
+      <div className="row row-cols-2" id="login">
+        <div className="col head">
+          <h3>로그인</h3>
+        </div>
+        <div className="col body">
+          <form name="loginForm" id="loginForm" method="post">
+            <input
+              type="text"
+              name="email"
+              className="email"
+              id="email"
+              placeholder="이메일을 입력하세요"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <input
+              type="password"
+              name="password"
+              className="password"
+              id="password"
+              placeholder="패스워드를 입력하세요"
+              value={password}
+              onChange={handlePasswordChange}
+              onKeyDown={handleKeyPress}
+            />
+            <p id="msg" style={{ color: 'red', textAlign: 'center' }}>{msg}</p>
+            <br />
+            <input
+              type="checkbox"
+              id="rememberEmail"
+              onClick={checkRememberEmail}
+              ref={rememberEmailRef}
+            />
+            이메일 기억
+            <input
+              type="checkbox"
+              id="rememberPassword"
+              onClick={checkRememberPassword}
+              ref={rememberPasswordRef}
+            />
+            패스워드 기억
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="remember-me"
+              onClick={checkRememberMe}
+              ref={rememberMeRef}
+            />
+            자동 로그인
+            <br />
+            <br />
+            <input
+              type="button"
+              id="btn_login"
+              className="btn_login"
+              value="로그인"
+              onClick={loginCheck}
+            />
+          </form>
+          <Link to="/signup">여기</Link>를 눌러 등록을 해주세요.
+          <br />
+          <br />
+          [<Link to="/searchID">아이디</Link> |
+          <Link to="/searchPassword">패스워드</Link> 찾기]
+          <br />
+          <br />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Login;

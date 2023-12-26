@@ -1,0 +1,83 @@
+@charset "UTF-8";
+#signup {
+  margin: 3rem auto;
+  max-width: 50rem;
+  border: 1px solid rgb(112, 58, 165);
+}
+#signup .head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('');
+  background-size: 15rem;
+}
+#signup .head h3 {
+  display: inline-block;
+  width: 7rem;
+  background-color: white;
+  box-shadow: 0.3rem 0.3rem 1rem 1rem white;
+  text-align: center;
+  font-weight: 800;
+}
+#signup .body {
+  padding: 4rem 2rem;
+  height: 70vh;
+  overflow:auto;
+}
+#signup .body label, #signup .body h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+#signup .body .address-wrap .search-address {
+  display: flex;
+  justify-content: space-between;
+}
+#signup .body .address-btn {
+  margin-left: 0.5rem;
+  background-color: #7851a9;
+  border: none;
+  color: white;
+}
+#email, #name, #nickname, #birth, #password, #password1 {
+  width: 100%;
+  padding: 6px 12px;
+  border: 1px solid #7851a9;
+  border-radius: 0.5rem;
+}
+#email:focus, #name:focus, #nickname:focus, #birth:focus, #password:focus, #password1:focus {
+  border: 1px solid #7851a9;
+  box-shadow: 2px 2px 5px 5px rgb(166, 139, 199);
+  outline: none;
+}
+.input_field {
+  margin-bottom: 0.5rem;
+}
+#id_profile_image::file-selector-button {
+  background-color: #7851a9;
+  color: white;
+}
+
+.imageZone {
+	border: 2px solid #7851a9;
+	width: 100%;
+	height: auto;
+	color: #7851a9;
+	text-align: center;
+	vertical-align: middle;
+	margin: auto;
+	padding: 5px 5px;
+	margin-bottom: 1rem;
+}
+#signup .body .form-text {
+  display: none;
+}
+#signup .body .signup-btn {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: rgb(112, 58, 165);
+  color: white;
+}
