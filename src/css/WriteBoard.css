@@ -1,0 +1,136 @@
+.WriteDiv {
+    width:50%;
+    height:auto;
+    margin: auto;
+    padding: 20px, 20px;
+    background-color:#FFFFFF;
+    text-align: center;
+    border:4px solid gray;
+    border-radius: 30px;
+  }
+  
+  .writer, .title {
+    width: 90%;
+    border:none;
+    border-bottom: 2px solid #adadad;
+    margin: 10px;
+    padding: 5px 5px;
+    outline:none;
+    color: #636e72;
+    font-size:16px;
+    height:25px;
+    background: none;
+  }
+  
+  .content{
+    width: 90%;
+    height: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: solid #adadad;
+    font-size: 16px;
+    resize: both;
+  }
+  
+  .btn_write  {
+    position:relative;
+    left:20%;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width:40%;
+    height:40px;
+    background: red;
+    background-position: left;
+    background-size: 200%;
+    color:white;
+    font-weight: bold;
+    border:none;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+  }
+  
+  .btn_cancel{
+    position:relative;
+    left:20%;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width:40%;
+    height:40px;
+    background: pink;
+    background-position: left;
+    background-size: 200%;
+    color:white;
+    font-weight: bold;
+    border:none;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+  }
+  
+  .filename{
+    display:inline-block;
+    vertical-align:top;
+    width:50%;
+  }
+  
+  .filesize{
+    display:inline-block;
+    vertical-align:top;
+    color:#30693D;
+    width:30%;
+    margin-left:10px;
+    margin-right:5px;
+  }
+  
+  .fileuploadForm {
+   margin: 5px;
+   padding: 5px 5px 2px 30px;
+   text-align: left;
+   width:90%;
+   
+  }
+  
+  .fileZone {
+    border: solid #adadad;
+    background-color: #a0a0a0;
+    width: 97%;
+    height:80px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+    font-size:120%;
+  }
+  
+  .fileUploadList {
+    border: solid #adadad;
+    width: 97%;
+    height:auto;
+    padding: 5px;
+    font-size:120%;  
+  }
+  
+  .b_delete{
+    background-color:#A8352F;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;display:inline-block;
+    color:#ffff;
+    font-family:arial;font-size:13px;font-weight:normal;
+    padding:4px 15px;
+    cursor:pointer;
+    vertical-align:top
+  }  
+  .statusbar{
+    border-bottom:1px solid #92AAB0;;
+    min-height:25px;
+    width:96%;
+    padding:10px 10px 0px 10px;
+    vertical-align:top;
+  }
+  .statusbar:nth-child(odd){
+    background:#EBEFF0;
+  }

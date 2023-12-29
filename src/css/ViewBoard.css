@@ -1,0 +1,27 @@
+.likeClick, .dislikeClick {
+    padding: 10px 10px;
+	text-align: center;	
+	text-decoration: none;
+    border: solid 1px #a0a0a0;
+    display: inline-block;
+    background-color: #d2d2d2;
+    border-radius: 20px
+}
+
+.bottom_menu {
+	margin-top: 20px;
+}
+
+.bottom_menu > a:link, .bottom_menu > a:visited {
+	background-color: #FFA500;
+	color: maroon;
+	padding: 15px 25px;
+	text-align: center;
+	display: inline-block;
+	text-decoration: none;
+}
+
+.bottom_menu > a:hover, .bottom_menu > a:active {
+	background-color: #1E90FF;
+	text-decoration: none;
+}
