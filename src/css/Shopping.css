@@ -1,59 +1,76 @@
 * {
     box-sizing: border-box;
 }
+
 body {
-      margin: 0;
-      min-width: 992px;
-      font-family: "Helvetica";
+    margin: 0;
+    min-width: 992px;
+    font-family: "Helvetica";
 }
+.div50 {
+    padding: 11px 0;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    white-space: nowrap;
+  }
 .navi {
-    height: 60px;
-    padding-left: 30px;
-    padding-right: 30px;
+    height: 75px;
+    
+    display: flex;
+    
 }
-.navi #logo {
-    line-height: 60px;
-}
+
 .navi #logo img {
     vertical-align: middle;
+    
 }
+
 .navi #menu {
-    float: right;
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    align-items: center;
 }
+
 .navi #menu li {
-    float: left;
     margin-left: 30px;
     line-height: 60px;
 }
+
 .navi #menu li a {
     text-decoration: none;
     font-size: 13px;
     font-weight: bold;
-    color:#545454;
+    color: #545454;
 }
+
 .header {
+    
     height: 450px;
     background-image: url('../images/dogandcat.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
 }
+
 .text h1 {
     font-size: 24px;
     color: #545454;
     font-weight: bold;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin: 60px auto;
     text-align: center;
 }
+
 .product-list {
     width: 795px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
+
 .product {
     display: block;
     width: 225px;
@@ -61,27 +78,56 @@ body {
     color: #545454;
     text-decoration: none;
     font-size: 16px;
-    float: left;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 20px;
 }
+
 .product-name {
     margin-top: 20px;
     margin-bottom: 4px;
 }
+
 .product-price {
     margin-bottom: 80px;
 }
-.clearfix{
+
+.clearfix {
     clear: both;
 }
-.footer{
+
+.footer {
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 80px;
+    margin: 40px 0;
 }
-.footer a{
+
+.footer a {
     text-decoration: none;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 0 20px;
 }
+
+.search-container {
+    display: flex;
+    justify-content: center;
+}
+
+
+.navi01{
+    width: 80px;
+    text-decoration: none;  
+    text-align: center;
+    margin: 0 50px
+}
+.logodiv{
+    margin-right: 100px;
+}
+.a23 {
+    color: #868688;
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .logodiv{
+    margin-left:90px;
+  }

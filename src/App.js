@@ -8,11 +8,12 @@ import ViewBoard from './component/ViewBoard.js';
 import WriteBoard from './component/WriteBoard.js';
 import ModifyBoard from './component/ModifyBoard.js';
 import Shopping from './component/Shopping.js'
+import Main from './component/main.js'
 
 const App = () => {
   return(
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Main />} />
       <Route path="/member/signup" element={<Signup />} />
       <Route path="/member/memberInfo" element={<MemberInfo />} />
       <Route path="/member/memberInfoModify" element={<MemberInfoModify />} />

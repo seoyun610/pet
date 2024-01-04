@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';  
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/Shopping.css'
+import '../css/Shopping.css';
+import '../css/ShoppingGrid.css'; // 그리드 스타일을 위한 CSS 파일을 추가해주세요.
+import logo from '../images/logo3.png'
 
 function Shopping() {
   const [keyword, setKeyword] = useState('강아지 사료');
@@ -9,43 +11,75 @@ function Shopping() {
 
   const handleInputChange = (e) => {
     setKeyword(e.target.value);
-  }
+  };
 
   const handleSearch = () => {
     if (!keyword.trim()) {
       return;
     }
-  
+
     axios.get(`http://localhost:8080/shopping/crawling?query=${keyword}`)
       .then(response => {
         setItemP(response.data);
-      })
+      })  
       .catch(error => {
-        console.error('There was an error!', error);
+        console.error('에러가 발생했습니다!', error);
       });
   };
 
   useEffect(() => {
-    handleSearch();  
-  }, []); 
-  
+    handleSearch();
+  }, []);
 
   return (
-    <div className="container">
-      <div className="navi">
-        <a href="#" id="logo">
-          <img src="https://i.postimg.cc/C5FbwsQr/logo.png" height="20" alt="Logo"/>
-        </a>
-        <ul id="menu">
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Shop</a></li>
-          <li><a href="#">Cart</a></li>
-          <li><a href="#">Login</a></li>
-        </ul>
+    <div>
+      <div className="container">
+        <div
+          className="navi"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div className="logodiv" id="logo" style={{ left: '30px', top: '10px' }}>
+            <img src={logo} alt="logo image" style={{ width: '100px', height: 'auto' }} />
+          </div>
+          <div className="div50">
+            <a className="a23" href="/">
+              <div className="navi01">홈</div>
+            </a>
+          </div>
+          <div className="div50">
+            <a className="a23" href="/shopping/crawling">
+              <div className="navi01">쇼핑</div>
+            </a>
+          </div>
+          <div className="div50">
+            <a className="a23" href="http://www.localhost:8080/community/totalView?page=1">
+              <div className="navi01">커뮤니티</div>
+            </a>
+          </div>
+          <div className="div50">
+            <a className="a23" href="http://www.localhost:8080/community/map">
+              <div className="navi01">동물병원 찾기</div>
+            </a>
+          </div>
+          <div className="div50">
+            <a className="a23" href="http://www.localhost:8080/member/login">
+              <div className="navi01">로그인</div>
+            </a>
+          </div>
+          <div className="div50">
+            <a className="a23" href="http://www.localhost:8080/member/memberInfo">
+              <div className="navi01">마이페이지</div>
+            </a>
+          </div>
+        </div>
       </div>
       <div className="header"></div>
       <div className="text">
-        <h1>Our New Products</h1>
+        <h1>Pet Shop</h1>
         <div className="search-container d-flex justify-content-center">
           <input
             type="text"
@@ -54,53 +88,23 @@ function Shopping() {
             placeholder="검색할 제목, 작성자 이름 및 내용을 입력하세요."
             value={keyword}
             onChange={handleInputChange}
-            className="mr-2"  
+            className="mr-2"
           />
           <input type="button" id="mainbutton" value="검색" onClick={handleSearch} />
         </div>
-        <table className="InfoTable">
-         
-          <tbody>
-            {itemP.map((item, index) => (
-              <tr key={index}>
-                <td>
-                  <a href={item.link} style={{ display: 'block', width: '100%', height: 'auto' }}>
-                    <img src={item.image} alt="상품 이미지" style={{ width: '100%', height: 'auto' }} />
-                  </a>
-                </td>
-                <td>
-                  <a href={item.link} style={{ fontSize: '20px', width: '60%' }}>
-                    <span>{item.title}</span>
-                  </a>
-                </td>
-                <td>
-                  <a href={item.link} style={{ fontSize: '16px' }}>
-                    <span>{item.lprice + '원'}</span>
-                  </a>
-                </td>
-              </tr>
-            ))}
-            {list === null && (
-              <tr>
-                <td colSpan="3" className="no-data">
-                  등록된 게시물이 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <br />
+        <div className="grid-container"> {/* 그리드 컨테이너로 변경 */}
+          {itemP.map((item, index) => (
+            <div key={index} className="grid-item">
+              <a href={item.link} className="grid-link">
+                <img src={item.image} alt="상품 이미지" className="grid-image" style={{ width: '100%', height: 'auto' }} /> {/* 이미지 크기를 조정하는 부분 */}
+                <div className="grid-title">{item.title}</div>
+                <div className="grid-price">{item.lprice + '원'}</div>
+              </a>
+            </div>
+          ))}
+        </div>
         <div className="clearfix"></div>
-      </div>
-      <div className="footer">
-        <a href="https://facebook.com">
-          <img src="https://i.postimg.cc/0r11BZ2j/facebook.png" height="20" alt="Facebook"/>
-        </a>
-        <a href="https://instagram.com">
-          <img src="https://i.postimg.cc/9XZmGqf0/instagram.png" height="20" alt="Instagram"/>
-        </a>
-        <a href="https://twitter.com">
-          <img src="https://i.postimg.cc/c1RWKyD8/twitter.png" height="20" alt="Twitter"/>
-        </a>
       </div>
     </div>
   );
